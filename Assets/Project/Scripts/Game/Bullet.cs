@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
-    public float speed = 8f;
-    public float lifeDuration = 0.7f;
+    public float speed = 3f;
+    public float lifeDuration = 1f;
 
     private float lifeTimer;
     // Start is called before the first frame update
