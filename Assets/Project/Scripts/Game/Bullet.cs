@@ -5,11 +5,11 @@ using UnityEngine;
 public class Bullet : MonoBehaviour
 {
     public float speed = 3f;
-    public float lifeDuration = 1f;
+    public float lifeDuration = 2f;
 
     private float lifeTimer;
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         lifeTimer = lifeDuration;
     }
@@ -23,7 +23,7 @@ public class Bullet : MonoBehaviour
         lifeTimer -= Time.deltaTime;
         if (lifeTimer <= 0f)
 		{
-            Destroy(this.gameObject);
+            gameObject.SetActive(false);
 		}
     }
 }
