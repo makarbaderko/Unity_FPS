@@ -53,9 +53,9 @@ public class Player : MonoBehaviour
                 health -= enemy.damage;
                 isHurt = true;
                 //Perform knock back
-                Vector3 hurtDirection = (this.transform.position - enemy.transfrom.position).normalized;
+                Vector3 hurtDirection = (transform.position - enemy.transform.position).normalized;
                 Vector3 knockbackDirection = (hurtDirection + Vector3.up).normalized;
-                GetComponent<RigidBody>().AddForce(knockbackDirection*knockBackForce);
+                GetComponent<Rigidbody>().AddForce(knockbackDirection*knockBackForce);
                 StartCoroutine(HurtRoutine());
             }
         }
