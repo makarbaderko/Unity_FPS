@@ -7,6 +7,12 @@ public class Player : MonoBehaviour
     [Header("Visuals")]
     public Camera playerCamera;
     [Header("Gameplay")]
+    public float knockBackForce = 100f;
+    private bool isHurt;
+    public float hurtDuration = 0.5f;
+    public int initialHealth = 100;
+    private int health;
+    public int Health { get { return health; } }
     public int initialAmmo = 12;
     private int ammo;
     public int Ammo { get { return ammo; } }
@@ -14,6 +20,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         ammo = initialAmmo;
+        health = initialHealth;
     }
 
     // Update is called once per frame
@@ -33,10 +40,30 @@ public class Player : MonoBehaviour
     //Check for collisions
     void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if (hit.collider.gameObject.GetComponent<AmmoCrate>() != null){
+        //Collect ammo crates
+        if (hit.collider.gameObject.GetComponent<AmmoCrate>() != null) {
             AmmoCrate ammoCrate = hit.collider.gameObject.GetComponent<AmmoCrate>();
             ammo += ammoCrate.ammo;
             Destroy(ammoCrate.gameObject);
-		}
+        } else if (hit.collider.GetComponent<Enemy>() != null) {
+            if (isHurt == false)
+            {
+                //Touching enemies
+                Enemy enemy = hit.collider.GetComponent<Enemy>();
+                health -= enemy.damage;
+                isHurt = true;
+                //Perform knock back
+                Vector3 hurtDirection = (this.transform.position - enemy.transfrom.position).normalized;
+                Vector3 knockbackDirection = (hurtDirection + Vector3.up).normalized;
+                GetComponent<RigidBody>().AddForce(knockbackDirection*knockBackForce);
+                StartCoroutine(HurtRoutine());
+            }
+        }
+	}
+
+    IEnumerator HurtRoutine()
+	{
+        yield return new WaitForSeconds(hurtDuration);
+        isHurt = false;
 	}
 }
